@@ -18,6 +18,12 @@ func TestToGraphQLFields(t *testing.T) {
 			}{},
 			Expected: "name",
 		},
+		"struct pointer": {
+			Type: &struct {
+				Name string `json:"name"`
+			}{},
+			Expected: "name",
+		},
 		"nested struct": {
 			Type: struct {
 				Person struct {
@@ -26,6 +32,18 @@ func TestToGraphQLFields(t *testing.T) {
 				} `json:"person"`
 			}{},
 			Expected: "person { name age }",
+		},
+		"nested struct slice and no tags": {
+			Type: struct {
+				People []struct {
+					Name string `json:"name,omitempty"`
+					Age  uint   `json:"age,omitempty"`
+					Pet struct{
+						Name string
+					} `graphql:"pet"`
+				} `json:"people"`
+			}{},
+			Expected: "people { name age pet { Name } }",
 		},
 	}
 
