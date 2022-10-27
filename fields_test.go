@@ -45,6 +45,15 @@ func TestToGraphQLFields(t *testing.T) {
 			}{},
 			Expected: "people { name age pet { Name } }",
 		},
+		"nested struct slice of pointers": {
+			Type: struct {
+				People []*struct {
+					Name string `json:"name,omitempty"`
+					Age  uint   `json:"age,omitempty"`
+				} `json:"people"`
+			}{},
+			Expected: "people { name age }",
+		},
 	}
 
 	for n, c := range cases {
